@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HKDSE Biology Elective 4: Biotechnology</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #27ae60;
+            --accent: #3498db;
+            --bg-color: #f4f7f6;
+            --text-color: #333;
+            --card-bg: #fff;
+            --border-radius: 8px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            background: var(--card-bg);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 0.5rem;
+            flex-wrap: wrap;
+            gap: 10px;
+            position: sticky;
+            top: 105px;
+            z-index: 999;
+        }
+
+        nav button {
+            background: none;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: var(--transition);
+        }
+
+        nav button:hover, nav button.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            color: var(--primary);
+            border-bottom: 3px solid var(--secondary);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: var(--transition);
+            border-left: 5px solid var(--accent);
+        }
+
+        .card:hover {
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        }
+
+        .card h3 {
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .card ul {
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .card li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Interactive Diagram Styles */
+        .diagram-container {
+            background: #eef2f5;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            margin: 1.5rem 0;
+            overflow-x: auto;
+            text-align: center;
+        }
+
+        .dna-packing {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .dna-level {
+            background: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            border: 2px solid var(--accent);
+            font-weight: bold;
+            position: relative;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .dna-level:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        .dna-level::after {
+            content: '⬇';
+            display: block;
+            font-size: 20px;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        .dna-level:last-child::after {
+            display: none;
+        }
+
+        /* Gel Electrophoresis Simulation */
+        .gel-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #2d2d2d;
+            padding: 20px;
+            border-radius: 10px;
+            color: white;
+            margin-top: 20px;
+            position: relative;
+        }
+        
+        .gel-pole {
+            font-weight: bold;
+            font-size: 1.2rem;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+        }
+
+        .gel-lanes {
+            display: flex;
+            gap: 10px;
+            flex-grow: 1;
+            justify-content: space-around;
+        }
+
+        .lane {
+            background: rgba(255,255,255,0.1);
+            width: 40px;
+            height: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            border-bottom: 2px solid #555;
+        }
+
+        .well {
+            width: 30px;
+            height: 10px;
+            background: #444;
+            border: 1px solid #777;
+            position: absolute;
+            top: 5px;
+        }
+
+        .band {
+            width: 30px;
+            height: 5px;
+            background: var(--secondary);
+            position: absolute;
+            border-radius: 2px;
+            box-shadow: 0 0 5px var(--secondary);
+        }
+
+        /* PCR Animation */
+        .pcr-cycle {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .pcr-step {
+            background: white;
+            border: 2px solid var(--accent);
+            padding: 15px;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 600px;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .pcr-step span.temp {
+            background: var(--accent);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        /* Tabs for complex topics */
+        .tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .tabs button {
+            background: #e0e0e0;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px 5px 0 0;
+            font-weight: bold;
+            transition: var(--transition);
+        }
+
+        .tabs button.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+            background: white;
+            padding: 15px;
+            border-radius: 0 5px 5px 5px;
+            border: 1px solid #ddd;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.4s;
+        }
+
+        /* Interactive Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        /* Quiz Section */
+        .quiz-container {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .quiz-option {
+            display: block;
+            padding: 10px;
+            margin: 5px 0;
+            background: #f0f0f0;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .quiz-option:hover {
+            background: #e0e0e0;
+        }
+
+        .quiz-option.correct {
+            background: #a8e6cf;
+            border: 1px solid var(--secondary);
+        }
+
+        .quiz-option.wrong {
+            background: #ffaaa5;
+            border: 1px solid #e74c3c;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                position: static;
+                top: 0;
+            }
+            .gel-box {
+                flex-direction: column;
+            }
+            .gel-pole {
+                writing-mode: horizontal-tb;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🧬 HKDSE Biology Elective 4</h1>
+        <p>Biotechnology - Interactive Notes & Visual Guide</p>
+    </header>
+
+    <nav id="nav-menu">
+        <button class="active" onclick="openTab('dna')">DNA & Chromosomes</button>
+        <button onclick="openTab('genetic-code')">Genetic Code</button>
+        <button onclick="openTab('recombinant')">Recombinant DNA</button>
+        <button onclick="openTab('pcr')">PCR</button>
+        <button onclick="openTab('fingerprint')">DNA Fingerprinting</button>
+        <button onclick="openTab('therapy')">Gene & Stem Cell Therapy</button>
+        <button onclick="openTab('transgenic')">Transgenics & Cloning</button>
+        <button onclick="openTab('antibodies')">Monoclonal Antibodies</button>
+        <button onclick="openTab('bioethics')">Bioethics</button>
+        <button onclick="openTab('quiz')">Quiz</button>
+    </nav>
+
+    <main>
+        <!-- Section 1: DNA & Chromosomes -->
+        <section id="dna" class="active">
+            <h2>Structure of Chromosome & DNA</h2>
+            
+            <div class="card">
+                <h3>Chromosome Organization</h3>
+                <p>A chromosome is made of DNA and proteins. The long thread of DNA wraps around histone proteins to form nucleosomes, which then coil up to form chromatin thread. Chromatin further condenses to form chromosomes.</p>
+                
+                <div class="diagram-container">
+                    <h4>Interactive: DNA Packing (Hover to Highlight)</h4>
+                    <div class="dna-packing">
+                        <div class="dna-level" title="2nm wide">DNA Double Helix (2 nm)</div>
+                        <div class="dna-level" title="11nm wide">Nucleosomes (DNA + Histone Proteins) (11 nm)</div>
+                        <div class="dna-level" title="30nm wide">Supercoiled Chromatin Fiber (30 nm)</div>
+                        <div class="dna-level" title="300nm loops">Coils and Loops (300 nm)</div>
+                        <div class="dna-level" title="1400nm wide">Condensed Chromosome (1400 nm)</div>
+                    </div>
+                </div>
+
+                <h4>Significance of this Organization:</h4>
+                <ul>
+                    <li>Allows the long chain of DNA to be packed densely.</li>
+                    <li>DNA molecules are protected by the proteins.</li>
+                    <li>Allows accurate sorting of chromosomes during cell division without tangling.</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>DNA Structure Details</h3>
+                <ul>
+                    <li>Double helix structure, with two sugar-phosphate chains running in opposite directions (antiparallel).</li>
+                    <li>Pairs of bases form horizontal connections between the chains.</li>
+                    <li><strong>Dimensions:</strong> 2 nm width, 3.4 nm per complete turn, 0.34 nm between adjacent bases.</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>Worked Example 1: Base Composition</h3>
+                <p>If a sample of DNA has 18% guanine (G), what percentage is thymine (T)?</p>
+                <p><strong>Answer:</strong> G pairs with C, so C = 18%. Total G + C = 36%. Remaining A + T = 64%. Since A = T, T = 32%.</p>
+            </div>
+        </section>
+
+        <!-- Section 2: Genetic Code -->
+        <section id="genetic-code">
+            <h2>The Genetic Code & Protein Synthesis</h2>
+            
+            <div class="card">
+                <h3>Key Properties of the Genetic Code</h3>
+                <ul>
+                    <li><strong>Triplet Code:</strong> Three consecutive bases (a codon) specify one particular amino acid.</li>
+                    <li><strong>Start Codon:</strong> AUG codes for Methionine (Met) and starts protein synthesis.</li>
+                    <li><strong>Degenerate Code:</strong> A single amino acid may be coded by more than one triplet. (4³ = 64 combinations for 20 amino acids).</li>
+                    <li><strong>Non-overlapping:</strong> Bases are assigned to form a codon and will not be shared with other bases to form another codon.</li>
+                    <li><strong>Universal:</strong> The same triplet code works for the same amino acids in all organisms.</li>
+                    <li><strong>Nonsense Triplets:</strong> Do not code for any known amino acid; serve as stop codons (e.g., UAA, UAG, UGA).</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Section 3: Recombinant DNA Technology -->
+        <section id="recombinant">
+            <h2>Recombinant DNA Technology</h2>
+            
+            <div class="card">
+                <h3>Core Steps in Genetic Engineering</h3>
+                <div class="tabs">
+                    <button class="active" onclick="openSubTab(event, 'step1')">1. Isolation & Cutting</button>
+                    <button onclick="openSubTab(event, 'step2')">2. Ligation</button>
+                    <button onclick="openSubTab(event, 'step3')">3. Transformation</button>
+                    <button onclick="openSubTab(event, 'step4')">4. Selection & Expression</button>
+                </div>
+
+                <div id="step1" class="tab-content active">
+                    <h4>Isolate desired gene and cut plasmid</h4>
+                    <ul>
+                        <li>Use a <strong>restriction enzyme</strong> to isolate the desired gene from the source.</li>
+                        <li>Use the <strong>same restriction enzyme</strong> to cut the plasmid.</li>
+                        <li>This creates complementary <strong>sticky ends</strong> on both the target gene and the plasmid.</li>
+                    </ul>
+                </div>
+                <div id="step2" class="tab-content">
+                    <h4>Join the DNA</h4>
+                    <ul>
+                        <li>Use <strong>DNA ligase</strong> to join the desired gene and the cut plasmid together via complementary base pairing between the unpaired bases in their sticky ends.</li>
+                        <li>Result: Recombinant plasmid.</li>
+                    </ul>
+                </div>
+                <div id="step3" class="tab-content">
+                    <h4>Introduce into host cells</h4>
+                    <ul>
+                        <li>Introduce the recombinant plasmids into bacterial cells.</li>
+                        <li>Methods: Treatment with ice-cold calcium chloride (CaCl₂) followed by brief incubation at 40°C, or brief electric shock.</li>
+                    </ul>
+                </div>
+                <div id="step4" class="tab-content">
+                    <h4>Selection & Mass Culture</h4>
+                    <ul>
+                        <li>Select transformed bacteria by culturing on nutrient agar containing a <strong>specific antibiotic</strong> (only bacteria with the plasmid survive).</li>
+                        <li>Mass culture the transformed bacterial cells in a nutrient medium containing the antibiotic.</li>
+                        <li>Induce the expression of the gene to produce the protein product.</li>
+                        <li>Extract and purify the gene product (e.g., human insulin).</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Application: Human Insulin Production</h3>
+                <ul>
+                    <li>Mass produced to meet increasing demand instead of using pig insulin.</li>
+                    <li><strong>Advantages:</strong> Eliminates transmission of animal pathogens, eliminates allergens from pig insulin, and eliminates immune responses since the amino acid sequence matches human insulin.</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>Concepts from Past Papers</h3>
+                <ul>
+                    <li><strong>Plasmid as a vector:</strong> Carries foreign genes and transfers them to host cells.</li>
+                    <li><strong>Antibiotic resistance:</strong> Used as a selectable marker. If a target gene is inserted into the middle of a tetracycline resistance gene, that gene is interrupted (no longer functional), so the bacteria lose tetracycline resistance.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Section 4: PCR -->
+        <section id="pcr">
+            <h2>Polymerase Chain Reaction (PCR)</h2>
+            
+            <div class="card">
+                <h3>Purpose</h3>
+                <p>Amplify a small amount of DNA into a large amount for further analysis (genetic testing, forensics, archaeological studies).</p>
+                
+                <h3>The Three Stages of a PCR Cycle</h3>
+                <div class="pcr-cycle">
+                    <div class="pcr-step">
+                        <div>
+                            <strong>1. Denaturation</strong><br>
+                            <small>Heat to ~95°C</small>
+                        </div>
+                        <span class="temp">95°C</span>
+                    </div>
+                    <div style="text-align:center; color:#999;">⬇</div>
+                    <div class="pcr-step">
+                        <div>
+                            <strong>2. Annealing</strong><br>
+                            <small>Cool down (usually ~55-65°C)</small><br>
+                            <small>Primers bind to single-stranded DNA</small>
+                        </div>
+                        <span class="temp" style="background:#e67e22;">~55°C</span>
+                    </div>
+                    <div style="text-align:center; color:#999;">⬇</div>
+                    <div class="pcr-step">
+                        <div>
+                            <strong>3. Extension</strong><br>
+                            <small>Heat to 72°C</small><br>
+                            <small>DNA polymerase adds dNTPs to 3' end of primers</small>
+                        </div>
+                        <span class="temp" style="background:#27ae60;">72°C</span>
+                    </div>
+                </div>
+
+                <h4 style="margin-top: 15px;">Key Components:</h4>
+                <ul>
+                    <li><strong>Taq DNA Polymerase:</strong> Heat-stable enzyme (from <em>Thermus aquaticus</em>) used so it doesn't denature at 95°C.</li>
+                    <li><strong>Primers:</strong> Short single-stranded DNA sequences complementary to the flanking regions of the target DNA. <em>Two types of primers are needed</em> because the two DNA strands have different sequences.</li>
+                    <li><strong>Free Nucleotides (dNTPs):</strong> Building blocks for new DNA.</li>
+                    <li><strong>Template DNA</strong></li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h3>PCR Curve Analysis</h3>
+                <ul>
+                    <li><strong>Exponential Growth:</strong> DNA doubles every cycle (2^n copies after n cycles).</li>
+                    <li><strong>Plateau (Levelling out):</strong> Occurs because nucleotides and primers get used up, and polymerase loses activity.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Section 5: DNA Fingerprinting -->
+        <section id="fingerprint">
+            <h2>DNA Fingerprinting & Gel Electrophoresis</h2>
+            
+            <div class="card">
+                <h3>Principles: VNTRs & RFLP</h3>
+                <ul>
+                    <li><strong>VNTRs (Variable Number Tandem Repeats):</strong> Short sequences of repeated DNA in non-coding regions. The number of repeats varies greatly between individuals. Inherited one allele from each parent.</li>
+                    <li><strong>RFLP (Restriction Fragment Length Polymorphism):</strong> Restriction enzymes break DNA into fragments of different lengths. This polymorphism is used in DNA fingerprinting.</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>Gel Electrophoresis Simulation</h3>
+                <p>DNA is negatively charged and migrates towards the positive pole (anode). Smaller fragments travel faster and further.</p>
+                
+                <div class="gel-box">
+                    <div class="gel-pole">Cathode (-) <br> Loading Wells</div>
+                    <div class="gel-lanes">
+                        <div class="lane">
+                            <div class="well"></div>
+                            <div class="band" style="top: 50px; width: 40px; height: 10px;"></div>
+                            <div class="band" style="top: 150px; width: 40px; height: 10px;"></div>
+                        </div>
+                        <div class="lane">
+                            <div class="well"></div>
+                            <div class="band" style="top: 80px; width: 40px; height: 10px;"></div>
+                            <div class="band" style="top: 200px; width: 40px; height: 10px;"></div>
+                        </div>
+                        <div class="lane">
+                            <div class="well"></div>
+                            <div class="band" style="top: 50px; width: 40px; height: 10px;"></div>
+                            <div class="band" style="top: 150px; width: 40px; height: 10px;"></div>
+                            <div class="band" style="top: 250px; width: 40px; height: 10px;"></div>
+                        </div>
+                    </div>
+                    <div class="gel-pole">Anode (+) <br> Smaller fragments</div>
+                </div>
+                <p style="font-size: 0.9em; margin-top: 10px; color: #666; text-align: center;">* Note: Sample 1 and 3 share similar band patterns, indicating a match.</p>
+
+                <h3 style="margin-top: 15px;">Key Steps:</h3>
+                <ol>
+                    <li>Extract DNA sample.</li>
+                    <li>Cut DNA with restriction enzymes.</li>
+                    <li>Load DNA into wells near the negative pole.</li>
+                    <li>Apply electric current (separates by size).</li>
+                    <li>Label with radioactive DNA probes / fluorescent dye and expose to X-ray film or UV light.</li>
+                </ol>
+            </div>
+
+            <div class="card">
+                <h3>Applications</h3>
+                <ul>
+                    <li><strong>Forensics:</strong> Matching suspect DNA to crime scene samples.</li>
+                    <li><strong>Paternity/Maternity:</strong> Identifying family relationships (bands must match biological parents).</li>
+                    <li><strong>Medical Diagnostics:</strong> Screening for inherited diseases or cancer mutations.</li>
+                    <li><strong>Food Composition:</strong> Detecting GM foods or authenticating natural products.</li>
+                    <li><strong>Archaeology:</strong> Studying ancient DNA and human migration patterns.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Section 6: Gene & Stem Cell Therapy -->
+        <section id="therapy">
+            <h2>Gene Therapy & Stem Cell Therapy</h2>
+            
+            <div class="card">
+                <h3>Gene Therapy</h3>
+                <p>Treatment of genetic diseases by substituting a defective gene with a therapeutic (normal) gene.</p>
+                
+                <div class="tabs">
+                    <button class="active" onclick="openSubTab(event, 'invivo')">In Vivo</button>
+                    <button onclick="openSubTab(event, 'exvivo')">Ex Vivo</button>
+                </div>
+
+                <div id="invivo" class="tab-content active">
+                    <h4>In Vivo Gene Therapy</h4>
+                    <ul>
+                        <li>Therapeutic gene is inserted into a vector (e.g., virus).</li>
+                        <li>The viral vector is introduced directly into the patient's body.</li>
+                        <li>The gene is inserted into target cells (e.g., liver cells).</li>
+                    </ul>
+                </div>
+                <div id="exvivo" class="tab-content">
+                    <h4>Ex Vivo Gene Therapy</h4>
+                    <ul>
+                        <li>Therapeutic gene is inserted into a vector.</li>
+                        <li>Target cells are removed from the patient's body and grown in culture.</li>
+                        <li>Viruses are added to insert the gene into the cells.</li>
+                        <li>The modified cells are transplanted back into the patient.</li>
+                    </ul>
+                </div>
+
+                <h4 style="margin-top: 15px;">Examples & Vectors:</h4>
+                <ul>
+                    <li><strong>SCID (Severe Combined Immunodeficiency):</strong> Caused by a mutation preventing lymphocyte production. Bone marrow stem cells are targeted <em>ex vivo</em> using a viral vector carrying the ADA gene.</li>
+                    <li><strong>Cystic Fibrosis:</strong> Defective CFTR gene (chloride channel). <em>In vivo</em> therapy using <strong>liposome-based vectors</strong> (safe and can target specific cells, unlike viruses) delivered via aerosol to the lungs.</li>
+                </ul>
+                
+                <h4 style="margin-top: 15px;">Hazards:</h4>
+                <ul>
+                    <li>Random insertion into the genome may cause harmful mutations or trigger cancer (leukemia).</li>
+                    <li>Immune response against the vector.</li>
+                    <li>Viral vector may regain ability to cause disease.</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>Stem Cell Therapy</h3>
+                <p>Stem cells are unspecialized cells capable of dividing indefinitely (mitosis) and differentiating into specialized cells.</p>
+                
+                <table>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Adult Stem Cells</th>
+                        <th>Embryonic Stem Cells</th>
+                    </tr>
+                    <tr>
+                        <td>Immune Rejection</td>
+                        <td>No rejection (derived from patient)</td>
+                        <td>May trigger immune response</td>
+                    </tr>
+                    <tr>
+                        <td>Supply</td>
+                        <td>Limited</td>
+                        <td>Actively dividing, unlimited</td>
+                    </tr>
+                    <tr>
+                        <td>Ethical Issues</td>
+                        <td>Less political/ethical issues</td>
+                        <td>More ethical issues (destruction of embryos)</td>
+                    </tr>
+                    <tr>
+                        <td>Differentiation</td>
+                        <td>Limited cell types</td>
+                        <td>Can differentiate into almost all cell types</td>
+                    </tr>
+                </table>
+
+                <h4 style="margin-top: 15px;">Applications:</h4>
+                <ul>
+                    <li><strong>COVID-19:</strong> Umbilical cord blood stem cells are cultured, differentiated into epithelial stem cells, and transferred to lungs to regenerate damaged epithelium.</li>
+                    <li><strong>Diabetes:</strong> Differentiate into pancreatic cells to treat insulin-dependent diabetes.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Section 7: Transgenics & Cloning -->
+        <section id="transgenic">
+            <h2>Transgenic Organisms & Cloning</h2>
+            
+            <div class="card">
+                <h3>Transgenic Plants & Animals</h3>
+                <ul>
+                    <li><strong>GM Salmon:</strong> Additional growth hormone gene -> faster growth/larger size.</li>
+                    <li><strong>BT Crops:</strong> Produce BT toxin to kill pests.</li>
+                    <li><strong>Golden Rice:</strong> Produces precursor of vitamin A (carotene) to reduce night blindness.</li>
+                    <li><strong>Agrobacterium:</strong> A soil bacterium used to transfer genes to plants. It contains a Ti plasmid that can integrate foreign DNA into the plant genome.</li>
+                    <li><strong>Gene Gun:</strong> Fires DNA-coated gold particles at high velocity into plant/animal tissue. (Advantage: Direct, no plasmid needed. Disadvantage: Random insertion, mechanical damage, costly).</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>Animal Cloning (e.g., Dolly the Sheep)</h3>
+                <p>Process: Somatic Cell Nuclear Transfer (SCNT)</p>
+                <ol>
+                    <li>Remove nucleus from an unfertilized egg cell.</li>
+                    <li>Fuse the enucleated egg cell with a somatic cell (e.g., udder cell) from the donor using electricity.</li>
+                    <li>Implant the resulting embryo into a surrogate mother.</li>
+                    <li>The clone is genetically identical to the donor of the somatic cell.</li>
+                </ol>
+            </div>
+
+            <div class="card">
+                <h3>Plant Cloning (Tissue Culture)</h3>
+                <ol>
+                    <li>Remove meristematic cells from a parent plant.</li>
+                    <li>Place in sterile culture medium with nutrients.</li>
+                    <li>Cells grow by mitosis to form a mass of undifferentiated cells called a <strong>callus</strong>.</li>
+                    <li>Transfer callus to a medium with plant hormones (auxins/cytokinins) to stimulate root and shoot growth.</li>
+                    <li>Transfer plantlets to soil.</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- Section 8: Monoclonal Antibodies -->
+        <section id="antibodies">
+            <h2>Monoclonal Antibodies</h2>
+            
+            <div class="card">
+                <h3>Production (Hybridoma Technology)</h3>
+                <ol>
+                    <li>Inject a specific antigen into a mouse to stimulate B cells.</li>
+                    <li>Extract B cells (short-lived) from the spleen.</li>
+                    <li>Fuse B cells with myeloma (tumour) cells (long-lived) to form <strong>hybridomas</strong>.</li>
+                    <li>Screen and culture the desired hybridoma. They will continuously secrete a large amount of identical antibodies (monoclonal antibodies).</li>
+                </ol>
+            </div>
+
+            <div class="card">
+                <h3>Applications</h3>
+                <ul>
+                    <li><strong>Pregnancy Test:</strong> Monoclonal antibodies bind to hCG hormone in urine. Binding causes a colour change on the test strip.</li>
+                    <li><strong>Cancer Treatment:</strong> Trastuzumab binds to HER-2 receptors on breast cancer cells, blocking hormones from triggering cell division. Also used to carry radioactive substances/toxins to cancer cells specifically.</li>
+                    <li><strong>Organ Transplant:</strong> Prevent rejection by attacking T cells.</li>
+                    <li><strong>COVID-19:</strong> Bind to the spike protein of the virus to block entry into cells.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Section 9: Bioethics -->
+        <section id="bioethics">
+            <h2>Bioethics</h2>
+            
+            <div class="card">
+                <h3>Ethical, Legal, Social, Economic, and Environmental Issues</h3>
+                
+                <div class="tabs">
+                    <button class="active" onclick="openSubTab(event, 'ethics-gmo')">GM Food/Organisms</button>
+                    <button onclick="openSubTab(event, 'ethics-cloning')">Cloning</button>
+                    <button onclick="openSubTab(event, 'ethics-gene')">Gene Therapy</button>
+                    <button onclick="openSubTab(event, 'ethics-hgp')">Human Genome Project</button>
+                </div>
+
+                <div id="ethics-gmo" class="tab-content active">
+                    <ul>
+                        <li>GM foods may contain foreign genes forbidden by some religions.</li>
+                        <li>Long-term effects on human health are unknown.</li>
+                        <li>Antibiotic-resistance marker genes may be transferred to pathogens ("superbugs").</li>
+                        <li>Gene pollution: Pollen from GM crops may cross-pollinate wild plants, upsetting ecological balance.</li>
+                    </ul>
+                </div>
+                <div id="ethics-cloning" class="tab-content">
+                    <ul>
+                        <li>Wastage of embryos during cloning.</li>
+                        <li>Destroys the naturally developed 'biparent' society (uniparent trend).</li>
+                        <li>Confusion in family relationships.</li>
+                        <li>Human cloning is illegal and raises eugenics concerns.</li>
+                    </ul>
+                </div>
+                <div id="ethics-gene" class="tab-content">
+                    <ul>
+                        <li>Germ-line gene therapy causes irreversible changes to future generations.</li>
+                        <li>Who has the right to choose to change genes (e.g., IQ, skin color)?</li>
+                        <li>Violation of nature / playing God.</li>
+                    </ul>
+                </div>
+                <div id="ethics-hgp" class="tab-content">
+                    <ul>
+                        <li>Who owns personal genetic information? (Privacy vs Insurance companies).</li>
+                        <li>Psychological impact of knowing undesirable genetic traits.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 10: Quiz -->
+        <section id="quiz">
+            <h2>Check Your Understanding</h2>
+            <div class="quiz-container">
+                <div id="question-area">
+                    <h3 id="question-text">Loading question...</h3>
+                    <div id="options-container"></div>
+                    <p id="feedback" style="margin-top: 10px; font-weight: bold;"></p>
+                </div>
+                <button onclick="nextQuestion()" style="margin-top: 15px; padding: 10px 20px; background: var(--accent); color: white; border: none; border-radius: 5px; cursor: pointer;">Next Question</button>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Navigation logic
+        function openTab(tabId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('section');
+            sections.forEach(sec => sec.classList.remove('active'));
+            
+            // Remove active class from nav buttons
+            const navButtons = document.querySelectorAll('#nav-menu button');
+            navButtons.forEach(btn => btn.classList.remove('active'));
+
+            // Show selected section
+            document.getElementById(tabId).classList.add('active');
+            
+            // Highlight clicked button
+            event.target.classList.add('active');
+            window.scrollTo(0, 0); // Scroll to top on tab change
+        }
+
+        // Sub-tabs logic
+        function openSubTab(evt, subTabId) {
+            const tabContents = evt.target.parentElement.parentElement.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+
+            const tabButtons = evt.target.parentElement.querySelectorAll('button');
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+
+            document.getElementById(subTabId).classList.add('active');
+            evt.target.classList.add('active');
+        }
+
+        // Simple Quiz Logic
+        const quizData = [
+            {
+                question: "What is the correct temperature for DNA denaturation in PCR?",
+                options: ["72°C", "95°C", "55°C", "37°C"],
+                correct: 1
+            },
+            {
+                question: "Which enzyme is used to join the desired gene and plasmid together?",
+                options: ["Restriction Enzyme", "DNA Polymerase", "DNA Ligase", "Reverse Transcriptase"],
+                correct: 2
+            },
+            {
+                question: "In gel electrophoresis, DNA fragments move towards the:",
+                options: ["Negative pole (Cathode)", "Positive pole (Anode)", "Neutral pole", "It depends on the fragment size"],
+                correct: 1
+            },
+            {
+                question: "Which of the following is NOT a property of the genetic code?",
+                options: ["Degenerate", "Overlapping", "Universal", "Triplet"],
+                correct: 1
+            },
+            {
+                question: "What type of cells are fused with B cells to create hybridomas?",
+                options: ["T cells", "Myeloma (tumour) cells", "Stem cells", "Red blood cells"],
+                correct: 1
+            }
+        ];
+
+        let currentQuizIndex = 0;
+
+        function loadQuestion() {
+            const q = quizData[currentQuizIndex];
+            document.getElementById('question-text').innerText = q.question;
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+            document.getElementById('feedback').innerText = '';
+
+            q.options.forEach((opt, index) => {
+                const div = document.createElement('div');
+                div.classList.add('quiz-option');
+                div.innerText = opt;
+                div.onclick = () => checkAnswer(index, div);
+                optionsContainer.appendChild(div);
+            });
+        }
+
+        function checkAnswer(selectedIndex, element) {
+            const q = quizData[currentQuizIndex];
+            const feedback = document.getElementById('feedback');
+            
+            // Disable all clicks
+            const options = document.querySelectorAll('.quiz-option');
+            options.forEach(opt => opt.onclick = null);
+
+            if (selectedIndex === q.correct) {
+                element.classList.add('correct');
+                feedback.innerText = "Correct! ✅";
+                feedback.style.color = "#27ae60";
+            } else {
+                element.classList.add('wrong');
+                options[q.correct].classList.add('correct');
+                feedback.innerText = "Incorrect. ❌ The correct answer is highlighted.";
+                feedback.style.color = "#e74c3c";
+            }
+        }
+
+        function nextQuestion() {
+            currentQuizIndex = (currentQuizIndex + 1) % quizData.length;
+            loadQuestion();
+        }
+
+        // Initialize first question
+        loadQuestion();
+    </script>
+</body>
+</html>
